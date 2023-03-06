@@ -1,0 +1,30 @@
+1,1,1,Peashooter,peashooter.jpg,350,fire,Chili Bean,Soldier Class
+2,1,2,Sunflower,sunflower.jpg,350,dark,Heal Beam,Healer Class
+3,1,3,Chomper,chomper.jpg,350,toxic,Goop,Oneshooter Class
+4,1,4,Cactus,cactus.jpg,350,ice,Potato,Sniper Class
+5,1,5,Citron,citron.jpg,350(600 with shield),electric,EMPeach,Shielder Class
+6,1,6,Rose,rose.jpg,350,fire,Time Snare,Support Class
+7,1,7,Kernel Corn,kernel_corn.jpg,350,BBQ,Barrage,Soldier Class
+8,1,8,Torchwood,torchwood.jpg,350(500 while transformed),none,Smoldering,Tank Class
+9,1,9,Fire Pea,fire_pea.jpg,350,toxic,Hyper,Soldier Class
+10,1,10,Mystic Flower,mystic_flower.jpg,350,puppy,Sunbeam,Healer Class
+11,1,11,Hot Rod Chomper,hot_rod_chomper.jpg,350,vampire,Sticky,Oneshooter Class
+12,1,12,Camo Cactus,camo_cactus.jpg,350,camo,Mine,Sniper Class
+13,1,13,Frozen Citron,frozen_citron.jpg,350(600 with shield),orange,Citron Ball,Shielder Class
+14,1,14,Druid Rose,druid_rose.jpg,350,ice,Arcane,Support Class
+15,1,15,BBQ Corn,bbq_corn.jpg,350,camo,Butter,Soldier Class
+16,1,16,Ice Pea,ice_pea.jpg,350,electric,Sombrero,Soldier Class
+17,1,17,Power Flower,power_flower.jpg,350,vampire,Heal,Healer Class
+18,1,18,Toxic Chomper,toxic_chomper.jpg,350,champ,Spikeweed,Oneshooter Class
+19,1,19,Fire Cactus,fire_cactus.jpg,350,camo,Tallnut,Sniper Class
+20,1,20,Electro Citron,electro_citron.jpg,350(600 with shield),meth,Peel Shield,Shielder Class
+21,1,21,Fire Rose,fire_rose.jpg,350,babilonga,Goatify,Support Class
+22,1,22,Mob Cob,mob_cob.jpg,350,BBQ,Shuck Shot,Soldier Class
+23,1,23,Toxic Pea,toxic_pea.jpg,350,plasma,Bean Bomb,Soldier Class
+24,1,24,Fire Flower,fire_flower.jpg,350,mystic,Solar Flare,Healer Class
+25,2,25,Foot Soldier,foot_soldier.jpg,350,camo,Stink Cloud,Soldier Class
+26,2,26,Engineer,engineer.jpg,350,nasa,Blaster,Engineer Class
+27,2,27,Scientist,scientist.jpg,350,krav,Explody Ball,Medic Class
+28,2,28,All-Star,all-star.jpg,350(600 with shield),champion,Dummy,Tank Class
+29,2,29,Imp,imp.jpg,350(650 while transformed),Impossible,Gravity,Assault Class
+30,2,30,Captain Deadbeard,captain_deadbeard.jpg,350,Captain fireball,Mega Heal,Sniper Class
