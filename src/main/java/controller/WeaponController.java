@@ -10,6 +10,7 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class WeaponController {
 
@@ -100,6 +101,55 @@ public class WeaponController {
     em.remove(weapon);
     em.getTransaction().commit();
     em.close();
+  }
+
+  public void createTableWeapons() {
+    // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
+
+    // obtiene un EntityManager a partir del EntityManagerFactory
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+    // comienza una transacción
+    entityManager.getTransaction().begin();
+
+    // crea la tabla Weapons
+    entityManager.createNativeQuery(
+            "CREATE TABLE weapons ( " +
+                    "  id_weapon serial NOT NULL, " +
+                    "  name character varying(3000) NOT NULL, " +
+                    "  damage integer NOT NULL, " +
+                    "  CONSTRAINT pk_weapons PRIMARY KEY (id_weapon) " +
+                    ")"
+    ).executeUpdate();
+
+    // finaliza la transacción
+    entityManager.getTransaction().commit();
+
+    // cierra el EntityManager y el EntityManagerFactory
+    entityManager.close();
+    entityManagerFactory.close();
+  }
+
+  public void dropTableWeapons() {
+    // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
+
+    // obtiene un EntityManager a partir del EntityManagerFactory
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+    // comienza una transacción
+    entityManager.getTransaction().begin();
+
+    // dropea la tabla weapons
+    entityManager.createNativeQuery("DROP TABLE weapons").executeUpdate();
+
+    // finaliza la transacción
+    entityManager.getTransaction().commit();
+
+    // cierra el EntityManager y el EntityManagerFactory
+    entityManager.close();
+    entityManagerFactory.close();
   }
 
 }

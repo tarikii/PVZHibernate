@@ -64,7 +64,7 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    ArrayList<CharacterType> revistes = new ArrayList();
+    boolean salirMenu = false;
 
     ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
     Connection c = connectionFactory.connect();
@@ -80,56 +80,76 @@ public class Main {
 
     Menu menu = new Menu();
     int opcio;
-    opcio = menu.mainMenu();
 
-    switch (opcio) {
 
-      case 1:
+    while(!salirMenu){
+      opcio = menu.mainMenu();
 
-        System.out.println("1!!");
-        try {
-          characterController.createTableCharacters(c);
-        } catch (SQLException e) {
-          throw new RuntimeException(e);
-        }
-        try {
-          List<Weapon> weapons = weaponController.readWeaponsFile("src/main/resources/weapons.csv");
-          for (Weapon w : weapons) {
-            try {
-              weaponController.addWeapon(w);
-            } catch (Exception e) {
+      switch (opcio) {
+
+        case 1:
+          System.out.println("1!!");
+
+          characterTypeController.createTableCharacterTypes();
+          weaponController.createTableWeapons();
+          characterController.createTableCharacters();
+          break;
+
+        case 2:
+
+          System.out.println("2!!");
+          try {
+            List<Weapon> weapons = weaponController.readWeaponsFile("src/main/resources/weapons.csv");
+            for (Weapon w : weapons) {
+              try {
+                weaponController.addWeapon(w);
+              } catch (Exception e) {
+              }
             }
+
+
+            List<CharacterType> characterTypes = characterTypeController.readCharacterTypeFile("src/main/resources/characterType.csv");
+            for (CharacterType ct : characterTypes) {
+              try {
+                characterTypeController.addCharacterType(ct);
+              } catch (Exception e) {
+              }
+            }
+
+            List<Character> characters = characterController.readCharactersFile("src/main/resources/characters.csv", "src/main/resources/weapons.csv");
+            for (Character ch : characters) {
+              try {
+                characterController.addCharacter(ch);
+              } catch (Exception e) {
+              }
+            }
+
+
+          } catch (NumberFormatException | IOException e) {
+
+            e.printStackTrace();
+          }
+
+          break;
+
+        case 4:
+
+          try{
+            characterController.dropTableCharacters();
+            weaponController.dropTableWeapons();
+            characterTypeController.dropTableCharacterTypes();
+          }catch (Exception e){
+            System.out.println("Hay una tabla que quieres borrar que no existe en la base de datos");
           }
 
 
-          List<CharacterType> characterTypes = characterTypeController.readCharacterTypeFile("src/main/resources/characterType.csv");
-          for (CharacterType ct : characterTypes) {
-            try {
-              characterTypeController.addCharacterType(ct);
-            } catch (Exception e) {
-            }
-          }
+          break;
 
-          List<Character> characters = characterController.readCharactersFile("src/main/resources/characters.csv", "src/main/resources/weapons.csv");
-          for (Character ch : characters) {
-            try {
-              characterController.addCharacter(ch);
-            } catch (Exception e) {
-            }
-          }
+        default:
+          System.out.println("Adeu!!");
+          System.exit(1);
 
-
-        } catch (NumberFormatException | IOException e) {
-
-          e.printStackTrace();
-        }
-        break;
-
-      default:
-        System.out.println("Adeu!!");
-        System.exit(1);
-        break;
-
+      }
     }
   }
 }

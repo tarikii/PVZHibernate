@@ -5,6 +5,7 @@ import model.CharacterType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -109,5 +110,53 @@ public class CharacterTypeController {
     em.remove(characterType);
     em.getTransaction().commit();
     em.close();
+  }
+
+  public void createTableCharacterTypes(){
+      // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
+      EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
+
+      // obtiene un EntityManager a partir del EntityManagerFactory
+      EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+      // comienza una transacción
+      entityManager.getTransaction().begin();
+
+      // crea la tabla Character_Type
+      entityManager.createNativeQuery(
+              "CREATE TABLE character_type ( " +
+                      "  id_character_type serial NOT NULL, " +
+                      "  name_type character varying(3000) NOT NULL, " +
+                      "  CONSTRAINT pk_characters_types PRIMARY KEY (id_character_type) " +
+                      ")"
+      ).executeUpdate();
+
+      // finaliza la transacción
+      entityManager.getTransaction().commit();
+
+      // cierra el EntityManager y el EntityManagerFactory
+      entityManager.close();
+      entityManagerFactory.close();
+  }
+
+  public void dropTableCharacterTypes() {
+    // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
+
+    // obtiene un EntityManager a partir del EntityManagerFactory
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+    // comienza una transacción
+    entityManager.getTransaction().begin();
+
+    // dropea la tabla characters
+    entityManager.createNativeQuery("DROP TABLE character_type").executeUpdate();
+
+    // finaliza la transacción
+    entityManager.getTransaction().commit();
+
+    // cierra el EntityManager y el EntityManagerFactory
+    entityManager.close();
+    entityManagerFactory.close();
   }
 }

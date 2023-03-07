@@ -3,6 +3,9 @@ package controller;
 import model.Character;
 import model.Weapon;
 import model.CharacterType;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -11,6 +14,7 @@ import org.hibernate.tool.schema.TargetType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -124,25 +128,64 @@ public class CharacterController {
 
 
 
-  public void createTableCharacters(Connection connection) throws SQLException {
+  public void createTableCharacters() {
+    // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
 
+    // obtiene un EntityManager a partir del EntityManagerFactory
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
-    registryBuilder.configure();
+    // comienza una transacción
+    entityManager.getTransaction().begin();
 
+    // crea la tabla Characters
+    entityManager.createNativeQuery(
+            "CREATE TABLE characters ( " +
+                    "  id_character serial NOT NULL, " +
+                    "  id_character_type integer, " +
+                    "  id_weapon integer NOT NULL, " +
+                    "  name character varying(3000) NOT NULL, " +
+                    "  image character varying(3000) NOT NULL, " +
+                    "  health character varying(3000) NOT NULL, " +
+                    "  variant character varying(3000) NOT NULL, " +
+                    "  abilities character varying(3000) NOT NULL, " +
+                    "  FPSClass character varying(3000) NOT NULL, " +
+                    "  CONSTRAINT pk_characters PRIMARY KEY (id_character), " +
+                    "  CONSTRAINT fk_characters_types FOREIGN KEY (id_character_type) " +
+                    "      REFERENCES character_type (id_character_type) MATCH SIMPLE " +
+                    "      ON UPDATE NO ACTION ON DELETE NO ACTION, " +
+                    "  CONSTRAINT fk_characters_weapons FOREIGN KEY (id_weapon) " +
+                    "      REFERENCES weapons (id_weapon) MATCH SIMPLE " +
+                    "      ON UPDATE NO ACTION ON DELETE NO ACTION " +
+                    ")"
+    ).executeUpdate();
 
-    StandardServiceRegistry registry = registryBuilder.build();
+    // finaliza la transacción
+    entityManager.getTransaction().commit();
 
-
-    MetadataSources metadataSources = new MetadataSources(registry);
-
-
-    metadataSources.addAnnotatedClass(Character.class);
-
-    SchemaExport schemaExport = new SchemaExport();
-    schemaExport.setDelimiter(";");
-    schemaExport.setOutputFile("schema.sql");
-    schemaExport.createOnly(EnumSet.of(TargetType.SCRIPT), metadataSources.buildMetadata());
+    // cierra el EntityManager y el EntityManagerFactory
+    entityManager.close();
+    entityManagerFactory.close();
   }
 
+  public void dropTableCharacters() {
+    // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
+    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
+
+    // obtiene un EntityManager a partir del EntityManagerFactory
+    EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+    // comienza una transacción
+    entityManager.getTransaction().begin();
+
+    // dropea la tabla characters
+    entityManager.createNativeQuery("DROP TABLE characters").executeUpdate();
+
+    // finaliza la transacción
+    entityManager.getTransaction().commit();
+
+    // cierra el EntityManager y el EntityManagerFactory
+    entityManager.close();
+    entityManagerFactory.close();
+  }
 }

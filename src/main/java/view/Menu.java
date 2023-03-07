@@ -18,8 +18,10 @@ public class Menu {
 
             System.out.println(" \nMENU PRINCIPAL \n");
 
-            System.out.println("1. Carrega dades. ");
-            System.out.println("2. Consulta dades. ");
+            System.out.println("1. Crear les taules. ");
+            System.out.println("2. Carrega dades. ");
+            System.out.println("3. Consulta dades. ");
+            System.out.println("4. Borrar les taules. ");
 
             System.out.println("0. Sortir. ");
 
@@ -30,7 +32,7 @@ public class Menu {
                 System.out.println("valor no vàlid");
                 e.printStackTrace();
             }
-        } while (option != 1  && option != 0);
+        } while (option != 1  && option != 2 && option != 3 && option != 4 && option != 0);
 
         return option;
     }
