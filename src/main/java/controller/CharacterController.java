@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class CharacterController {
+  private static final Scanner scanner = new Scanner(System.in);
 
   private Connection connection;
   private EntityManagerFactory entityManagerFactory;
@@ -94,11 +95,12 @@ public class CharacterController {
   }
 
   /* Method to READ all Characters */
-  public void listCharacters() {
+  public void listAllCharacters() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     List<Character> result = em.createQuery("from Character", Character.class)
         .getResultList();
+
     for (Character character : result) {
       System.out.println(character.toString());
     }
@@ -106,13 +108,62 @@ public class CharacterController {
     em.close();
   }
 
+  public void listAllPlantCharacters() {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    List<Character> result = em.createQuery("SELECT c FROM Character c JOIN c.characterType ct WHERE ct.name = :type", Character.class)
+            .setParameter("type", "Plant")
+            .getResultList();
+
+    for (Character character : result) {
+      System.out.println(character.toString());
+    }
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  public void listAllZombieCharacters() {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    List<Character> result = em.createQuery("SELECT c FROM Character c JOIN c.characterType ct WHERE ct.name = :type", Character.class)
+            .setParameter("type", "Zombie")
+            .getResultList();
+
+    for (Character character : result) {
+      System.out.println(character.toString());
+    }
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  public void orderCharactersByName() {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    List<String> result = em.createQuery("SELECT c.name FROM Character c ORDER BY c.name", String.class)
+            .getResultList();
+
+    for (String name : result) {
+      System.out.println(name);
+    }
+    em.getTransaction().commit();
+    em.close();
+  }
+
   /* Method to UPDATE activity for a Character */
-  public void updateCharacter(Integer characterId) {
+  public void updateCharacter(int characterId, String updateName) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     Character character = (Character) em.find(Character.class, characterId);
+    character.setName(updateName);
     em.merge(character);
     em.getTransaction().commit();
+
+    em.getTransaction().begin();
+    character = em.find(Character.class, characterId);
+    System.out.println("Informacion del character despues de tu Update:");
+    System.out.println(character.toString());
+    em.getTransaction().commit();
+
     em.close();
   }
 

@@ -77,13 +77,11 @@ public class CharacterTypeController {
   }
 
   /* Method to READ all CharacterType */
-  public void listCharacterType() {
+  public void listAllCharacterType() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     List<CharacterType> result = em.createQuery("from CharacterType", CharacterType.class)
         .getResultList();
-
-
 
     for (CharacterType characterType : result) {
       System.out.println(characterType.toString());

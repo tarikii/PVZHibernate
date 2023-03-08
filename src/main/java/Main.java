@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import controller.CharacterController;
 import controller.WeaponController;
@@ -23,6 +24,7 @@ import javax.persistence.Persistence;
 
 
 public class Main {
+  private static final Scanner scanner = new Scanner(System.in);
 
   static SessionFactory sessionFactoryObj;
 /*
@@ -90,9 +92,14 @@ public class Main {
         case 1:
           System.out.println("1!!");
 
-          characterTypeController.createTableCharacterTypes();
-          weaponController.createTableWeapons();
-          characterController.createTableCharacters();
+          try{
+            characterTypeController.createTableCharacterTypes();
+            weaponController.createTableWeapons();
+            characterController.createTableCharacters();
+          }catch (Exception e){
+            System.out.println("Hay una o varias tablas que quieres crear que ya existen en la base de datos");
+          }
+
           break;
 
         case 2:
@@ -132,14 +139,78 @@ public class Main {
 
           break;
 
+        case 3:
+          characterController.listAllCharacters();
+          break;
+
         case 4:
+          weaponController.listAllWeapons();
+          break;
+
+        case 5:
+          characterTypeController.listAllCharacterType();
+          break;
+
+        case 6:
+          characterController.listAllPlantCharacters();
+          break;
+
+        case 7:
+          characterController.listAllZombieCharacters();
+          break;
+
+        case 8:
+          characterController.orderCharactersByName();
+          break;
+
+        case 9:
+          System.out.println("Que weapon quieres buscar?");
+          String weaponName = scanner.nextLine();
+
+          try{
+            weaponController.listAllWeaponsByName(weaponName);
+          }catch (Exception e){
+            System.out.println("No se ha encontrado ningun Weapon con el nombre que has proporcionado, intentalo de nuevo");
+          }
+
+          break;
+
+        case 10:
+          System.out.println("Que ID tiene el character que quieres cambiar? Del 1 al 30");
+          int idCharacter = scanner.nextInt();
+          if(idCharacter >= 1 && idCharacter < 31){
+            System.out.print("Escribe el nombre nuevo para el character que quieres modificar: ");
+            String updateName = scanner.nextLine();
+
+            characterController.updateCharacter(idCharacter,updateName);
+          }
+          else{
+            System.out.println("La ID que estas intentando buscar no existe, recuerda que tiene que ser del 1 al 30!");
+          }
+          break;
+
+        case 11:
+          System.out.println("Que ID tiene el weapon que quieres cambiar? Del 1 al 30");
+          int idWeapon = scanner.nextInt();
+          if(idWeapon >= 1 && idWeapon < 31){
+            System.out.print("Escribe el daño nuevo para el weapon que quieres modificar: ");
+            int updateDamage = scanner.nextInt();
+
+            weaponController.updateWeapon(idWeapon,updateDamage);
+          }
+          else{
+            System.out.println("La ID que estas intentando buscar no existe, recuerda que tiene que ser del 1 al 30!");
+          }
+          break;
+
+        case 12:
 
           try{
             characterController.dropTableCharacters();
             weaponController.dropTableWeapons();
             characterTypeController.dropTableCharacterTypes();
           }catch (Exception e){
-            System.out.println("Hay una tabla que quieres borrar que no existe en la base de datos");
+            System.out.println("Hay una o varias tablas que quieres borrar que no existen en la base de datos");
           }
 
 

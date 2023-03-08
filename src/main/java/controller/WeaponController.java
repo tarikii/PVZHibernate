@@ -1,5 +1,6 @@
 package controller;
 
+import model.Character;
 import model.Weapon;
 
 import java.io.BufferedReader;
@@ -70,11 +71,26 @@ public class WeaponController {
 
 
   /* Method to READ all Weapons */
-  public void listWeapons() {
+  public void listAllWeapons() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     List<Weapon> result = em.createQuery("from Weapon", Weapon.class)
         .getResultList();
+
+    for (Weapon weapon : result) {
+      System.out.println(weapon.toString());
+    }
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  public void listAllWeaponsByName(String weaponName) {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    List<Weapon> result = em.createQuery("SELECT w FROM Weapon w WHERE LOWER(w.name) = LOWER(:name)", Weapon.class)
+            .setParameter("name", weaponName.toLowerCase())
+            .getResultList();
+
     for (Weapon weapon : result) {
       System.out.println(weapon.toString());
     }
@@ -89,6 +105,12 @@ public class WeaponController {
     Weapon weapon = (Weapon) em.find(Weapon.class, weaponId);
     weapon.setDamage(damage);
     em.merge(weapon);
+    em.getTransaction().commit();
+
+    em.getTransaction().begin();
+    weapon = em.find(Weapon.class, weaponId);
+    System.out.println("Informacion del weapon despues de tu Update:");
+    System.out.println(weapon.toString());
     em.getTransaction().commit();
     em.close();
   }
