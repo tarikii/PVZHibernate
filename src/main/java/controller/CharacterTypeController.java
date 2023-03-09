@@ -12,31 +12,45 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
 
+/**
+ * Esta clase es el controlador de character_type, que nos ayuda a interactuar con la tabla character_type.
+ *
+ * @author tarikii
+ */
 public class CharacterTypeController {
 
   private Connection connection;
   private EntityManagerFactory entityManagerFactory;
 
+  /**
+   * Un constructor del controlador que nos ayudara a conectarnos en la base de datos
+   *
+   * @param connection Le pasamos la conexion de la base de datos
+   */
   public CharacterTypeController(Connection connection) {
     this.connection = connection;
   }
 
+  /**
+   * Creamos una nueva instancia del controlador de character_type usando la conexion de la base de datos
+   *
+   * @param connection Le pasamos la conexion de la base de datos
+   * @param entityManagerFactory Le pasamos tambien el Hibernate que hemos creado
+   */
   public CharacterTypeController(Connection connection, EntityManagerFactory entityManagerFactory) {
     this.connection = connection;
     this.entityManagerFactory = entityManagerFactory;
   }
 
-  /**
-   * @param filename Aquest String correspon amb l'arxiu on s'emmagatzemen les
-   *                 dades de les instancies de CharacterType
-   * @throws IOException <dt><b>Preconditions:</b>
-   *                     <dd>
-   *                     filename<>nil </br> llistaCharacterType== nil
-   *                     <dt><b>Postconditions:</b>
-   *                     <dd>
-   *                     llistaCharacterType<>nil
-   */
 
+  /**
+   * Esta clase se encarga de leer el archivo CSV, y con este archivo rellenarnos toda la tabla de nuestra
+   * base de datos con la informacion que saca del archivo.
+   *
+   * @param filename la ruta del archivo character_type que queremos leer
+   * @return Una lista de character_type, que luego se meteran con ayuda de otros metodos
+   * @throws IOException Devuelve este error si hay algun problema al leer los archivos
+   */
   public List<CharacterType> readCharacterTypeFile(String filename) throws IOException {
     int characterTypeId;
     String name_type;
@@ -56,13 +70,12 @@ public class CharacterTypeController {
     return characterTypeList;
   }
 
-  public void printCharacterType(ArrayList<CharacterType> characterTypeList) {
-    for (int i = 0; i < characterTypeList.size(); i++) {
-      System.out.println(characterTypeList.get(i).toString());
-    }
-  }
 
-  /* Method to CREATE a CharacterType  in the database */
+  /**
+   * Añade un character_type (que procesamos con el csv) y lo mete en la base de datos
+   *
+   * @param characterType El character_type que queremos añadir
+   */
   public void addCharacterType(CharacterType characterType) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -76,7 +89,9 @@ public class CharacterTypeController {
     em.close();
   }
 
-  /* Method to READ all CharacterType */
+  /**
+   * Ordena los character_type por su nombre y los lista
+   */
   public void listAllCharacterType() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -90,26 +105,10 @@ public class CharacterTypeController {
     em.close();
   }
 
-  /* Method to UPDATE activity for a CharacterType */
-  public void updateCharacterType(Integer characterTypeId) {
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    CharacterType characterType = (CharacterType) em.find(CharacterType.class, characterTypeId);
-    em.merge(characterType);
-    em.getTransaction().commit();
-    em.close();
-  }
-
-  /* Method to DELETE a CharacterType from the records */
-  public void deleteCharacterType(Integer characterTypeId) {
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    CharacterType characterType = (CharacterType) em.find(CharacterType.class, characterTypeId);
-    em.remove(characterType);
-    em.getTransaction().commit();
-    em.close();
-  }
-
+  /**
+   * Crea la tabla character_type con ayuda del schema SQL
+   *
+   */
   public void createTableCharacterTypes(){
       // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
       EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
@@ -137,6 +136,11 @@ public class CharacterTypeController {
       entityManagerFactory.close();
   }
 
+  /**
+   * Dropea la tabla entera de character_type
+   *
+   @throws javax.persistence.PersistenceException Devuelve este error si hay un problema dropeando la tabla
+   */
   public void dropTableCharacterTypes() {
     // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");

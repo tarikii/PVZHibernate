@@ -8,25 +8,48 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/**
+ * Esta clase es el controlador de weapon, que nos ayuda a interactuar con la tabla weapons.
+ *
+ * @author tarikii
+ */
 public class WeaponController {
 
   private Connection connection;
   private EntityManagerFactory entityManagerFactory;
 
+  /**
+   * Un constructor del controlador que nos ayudara a conectarnos en la base de datos
+   *
+   * @param connection Le pasamos la conexion de la base de datos
+   */
   public WeaponController(Connection connection) {
     this.connection = connection;
   }
 
+  /**
+   * Creamos una nueva instancia del controlador de weapon usando la conexion de la base de datos
+   *
+   * @param connection Le pasamos la conexion de la base de datos
+   * @param entityManagerFactory Le pasamos tambien el Hibernate que hemos creado
+   */
   public WeaponController(Connection connection, EntityManagerFactory entityManagerFactory) {
     this.connection = connection;
     this.entityManagerFactory = entityManagerFactory;
   }
 
+  /**
+   * Esta clase se encarga de leer el archivo CSV, y con este archivo rellenarnos toda la tabla de nuestra
+   * base de datos con la informacion que saca del archivo.
+   *
+   * @param filename la ruta del archivo weapons que queremos leer
+   * @return Una lista de weapons, que luego se meteran con ayuda de otros metodos
+   * @throws IOException Devuelve este error si hay algun problema al leer los archivos
+   */
   public List<Weapon> readWeaponsFile(String filename) throws IOException {
     int id;
     String name;
@@ -49,14 +72,12 @@ public class WeaponController {
     return weaponsList;
   }
 
-  public void printWeapons(ArrayList<Weapon> weaponsList) {
-    for (int i = 0; i < weaponsList.size(); i++) {
-      System.out.println(weaponsList.get(i).toString());
-    }
-  }
 
-
-  /* Method to CREATE a Weapon in the database */
+  /**
+   * Añade un weapon (que procesamos con el csv) y lo mete en la base de datos
+   *
+   * @param weapon El weapon que queremos añadir
+   */
   public void addWeapon(Weapon weapon) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -70,7 +91,9 @@ public class WeaponController {
   }
 
 
-  /* Method to READ all Weapons */
+  /**
+   * Lista todos los weapons
+   */
   public void listAllWeapons() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -84,6 +107,11 @@ public class WeaponController {
     em.close();
   }
 
+  /**
+   * Ordena los weapons por su nombre y los lista
+   *
+   * @param weaponName El nombre del weapon que el usuario quiere buscar
+   */
   public void listAllWeaponsByName(String weaponName) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -98,7 +126,12 @@ public class WeaponController {
     em.close();
   }
 
-  /* Method to UPDATE activity for a weapon */
+  /**
+   * Actualiza el daño del weapon que buscaras con su ID
+   *
+   * @param weaponId El ID del weapon que quieres actualizar
+   * @param damage El daño nuevo que posee el weapon
+   */
   public void updateWeapon(Integer weaponId, int damage) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -115,16 +148,11 @@ public class WeaponController {
     em.close();
   }
 
-  /* Method to DELETE a Weapon from the records */
-  public void deleteWeapon(Integer weaponId) {
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    Weapon weapon = (Weapon) em.find(Weapon.class, weaponId);
-    em.remove(weapon);
-    em.getTransaction().commit();
-    em.close();
-  }
 
+  /**
+   * Crea la tabla weapons con ayuda del schema SQL
+   *
+   */
   public void createTableWeapons() {
     // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
@@ -153,6 +181,51 @@ public class WeaponController {
     entityManagerFactory.close();
   }
 
+  /**
+   * Inserta un nuevo weapon en la tabla weapons de la base de datos en base a lo que nos de el usuario
+   * como informacion
+   *
+   * @param name El nombre que querra el usuario del weapon
+   * @param damage El daño que posee este weapon
+   @throws javax.persistence.PersistenceException Devuelve este error si no se ha podido añadir el weapon
+   */
+  public void createWeaponManually(String name, int damage) {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    Weapon weapon = new Weapon();
+    weapon.setName(name);
+    weapon.setDamage(damage);
+    em.persist(weapon);
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  /**
+   * Borra el weapon o los weapons que poseen el mismo nombre que pone nuestro usuario por pantalla
+   *
+   @param name El nombre del weapon a borrar
+   @throws javax.persistence.PersistenceException Devuelve este error si ha habido un problema borrando
+   */
+  public void deleteWeaponByName(String name){
+    String sql = "FROM Weapon WHERE name = :name";
+
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    List<Weapon> result = em.createQuery(sql, Weapon.class)
+            .setParameter("name", name)
+            .getResultList();
+    for (Weapon weapon : result) {
+      em.remove(weapon);
+    }
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  /**
+   * Dropea la tabla entera de weapons
+   *
+   @throws javax.persistence.PersistenceException Devuelve este error si hay un problema dropeando la tabla
+   */
   public void dropTableWeapons() {
     // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");

@@ -29,8 +29,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+/**
+ * Esta clase es el controlador del character, que nos ayuda a interactuar con la tabla characters.
+ *
+ * @author tarikii
+ */
 public class CharacterController {
-  private static final Scanner scanner = new Scanner(System.in);
 
   private Connection connection;
   private EntityManagerFactory entityManagerFactory;
@@ -38,16 +42,27 @@ public class CharacterController {
   private CharacterTypeController characterTypeController = new CharacterTypeController(connection);
   private WeaponController weaponController = new WeaponController(connection);
 
-  public CharacterController(Connection connection) {
-    this.connection = connection;
-  }
-
+  /**
+   * Creamos una nueva instancia del controlador del character usando la conexion de la base de datos
+   *
+   * @param connection Le pasamos la conexion de la base de datos
+   * @param entityManagerFactory Le pasamos tambien el Hibernate que hemos creado
+   */
   public CharacterController(Connection connection, EntityManagerFactory entityManagerFactory) {
     this.connection = connection;
     this.entityManagerFactory = entityManagerFactory;
   }
 
 
+  /**
+   * Esta clase se encarga de leer el archivo CSV, y con este archivo rellenarnos toda la tabla de nuestra
+   * base de datos con la informacion que saca del archivo.
+   *
+   * @param charactersFile la ruta del archivo characters que queremos leer
+   * @param weaponsFile la ruta del archivo weapons que queremos leer
+   * @return Una lista de characters, que luego se meteran con ayuda de otros metodos
+   * @throws IOException Devuelve este error si hay algun problema al leer los archivos
+   */
   public List<Character> readCharactersFile(String charactersFile, String weaponsFile) throws IOException {
     // Lee el archivo de personajes
     List<String> characterLines = Files.readAllLines(Paths.get(charactersFile), StandardCharsets.UTF_8);
@@ -80,7 +95,11 @@ public class CharacterController {
     return characters;
   }
 
-  /* Method to CREATE a Character in the database */
+  /**
+   * Añade un character (que procesamos con el csv) y lo mete en la base de datos
+   *
+   * @param character El character que queremos añadir
+   */
   public void addCharacter(Character character) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -94,7 +113,9 @@ public class CharacterController {
     em.close();
   }
 
-  /* Method to READ all Characters */
+  /**
+   * Lista todos los characters de la base de datos
+   */
   public void listAllCharacters() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -108,6 +129,9 @@ public class CharacterController {
     em.close();
   }
 
+  /**
+   * Lista todos los characters que sean Plant
+   */
   public void listAllPlantCharacters() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -122,6 +146,9 @@ public class CharacterController {
     em.close();
   }
 
+  /**
+   * Lista todos los characters que sean Zombie
+   */
   public void listAllZombieCharacters() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -136,6 +163,9 @@ public class CharacterController {
     em.close();
   }
 
+  /**
+   * Ordena los characters por su nombre y los lista
+   */
   public void orderCharactersByName() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -149,7 +179,12 @@ public class CharacterController {
     em.close();
   }
 
-  /* Method to UPDATE activity for a Character */
+  /**
+   * Actualiza el nombre del character que buscaras con su ID
+   *
+   * @param characterId El ID del character que quieres actualizar
+   * @param updateName El nombre nuevo que le quieres poner a tu character
+   */
   public void updateCharacter(int characterId, String updateName) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
@@ -167,18 +202,11 @@ public class CharacterController {
     em.close();
   }
 
-  /* Method to DELETE a Character from the records */
-  public void deleteCharacter(Integer characterId) {
-    EntityManager em = entityManagerFactory.createEntityManager();
-    em.getTransaction().begin();
-    Character character = (Character) em.find(Character.class, characterId);
-    em.remove(character);
-    em.getTransaction().commit();
-    em.close();
-  }
 
-
-
+  /**
+   * Crea la tabla characters con ayuda del schema SQL
+   *
+   */
   public void createTableCharacters() {
     // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");
@@ -219,6 +247,64 @@ public class CharacterController {
     entityManagerFactory.close();
   }
 
+
+  /**
+   * Inserta un nuevo character en la tabla characters de la base de datos en base a lo que nos de el usuario
+   * como informacion
+   *
+   @param characterTypeId La ID del tipo
+   @param weaponId La ID del weapon que posee el character
+   @param name Su nombre
+   @param image El archivo de la imagen
+   @param health Su vida
+   @param variant Su variante
+   @param abilities Su habilidad/es
+   @param fpsClass Su clase FPS
+   @throws javax.persistence.PersistenceException Devuelve este error si no se ha podido añadir el character
+   */
+  public void createCharacterManually(int characterTypeId, int weaponId, String name, String image, String health, String variant, String abilities, String fpsClass) {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    Character character = new Character();
+    character.setCharacterTypeId(characterTypeId);
+    character.setWeaponId(weaponId);
+    character.setName(name);
+    character.setImage(image);
+    character.setHealth(health);
+    character.setVariant(variant);
+    character.setAbilities(abilities);
+    character.setFPSClass(fpsClass);
+    em.persist(character);
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  /**
+   * Borra el character o los characters que poseen el mismo nombre que pone nuestro usuario por pantalla
+   *
+   @param name El nombre del character a borrar
+   @throws javax.persistence.PersistenceException Devuelve este error si ha habido un problema borrando
+   */
+  public void deleteCharacterByName(String name){
+    String sql = "FROM Character WHERE name = :name";
+
+    EntityManager em = entityManagerFactory.createEntityManager();
+    em.getTransaction().begin();
+    List<Character> result = em.createQuery(sql, Character.class)
+            .setParameter("name", name)
+            .getResultList();
+    for (Character character : result) {
+      em.remove(character);
+    }
+    em.getTransaction().commit();
+    em.close();
+  }
+
+  /**
+   * Dropea la tabla entera de characters
+   *
+   @throws javax.persistence.PersistenceException Devuelve este error si hay un problema dropeando la tabla
+   */
   public void dropTableCharacters() {
     // crea un EntityManagerFactory utilizando la configuración definida en persistence.xml
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPAMagazines");

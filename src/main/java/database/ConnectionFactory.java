@@ -7,6 +7,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Gracias a esta clase somos capaces de conectarnos a nuestra base de datos y poder interactuar con ella
+ *
+ * @author rusben
+ */
 public class ConnectionFactory {
     // init database constants
     private static final String DATABASE_DRIVER = "org.postgresql.Driver";
@@ -28,11 +33,21 @@ public class ConnectionFactory {
     // init properties object
     private Properties properties;
 
+    /**
+     * Inicializa la conexion a nuestra base de datos
+     * Si el archivo "properties" no se puede encontrar, lanzara un RunTimeExpression error.
+     */
     private ConnectionFactory() {
         super();
         init();
     }
 
+    /**
+     * Devuelve una instancia de ConnectionFactory
+     * Si la instancia no existe, se generara una nueva
+     *
+     * @return La instancia de ConnectionFactory
+     */
     public static ConnectionFactory getInstance() {
         if (instance == null) {
             instance = new ConnectionFactory();
@@ -65,7 +80,11 @@ public class ConnectionFactory {
         }
     }
 
-    //	// create properties
+    /**
+     * Devuelve un objeto properties, que nos dara el user y la password del usuario de la base de datos
+     *
+     * @return El objeto de properties
+     */
     private Properties getProperties() {
         if (properties == null) {
             properties = new Properties();
@@ -76,7 +95,13 @@ public class ConnectionFactory {
         return properties;
     }
 
-    // connect database
+    /**
+     * Devuelve un objeto conexion que representara la conexion de nuestra base de datos
+     * Si la conexion no existe, se generara una nueva
+     *
+     * @return El objeto de connection
+     */
+
     public Connection connect() {
         if (connection == null) {
 
@@ -108,18 +133,6 @@ public class ConnectionFactory {
         return connection;
     }
 
-    // disconnect database
-    public void disconnect() {
-        if (connection != null) {
-            try {
-                connection.close();
-                connection = null;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 //	public void init() {
 //		Properties prop = new Properties();
 //		InputStream propStream = this.getClass().getClassLoader().getResourceAsStream("db.properties");
@@ -136,5 +149,4 @@ public class ConnectionFactory {
 //			throw new RuntimeException(message, e);
 //		}
 //	}
-
 }

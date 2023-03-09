@@ -23,10 +23,23 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 
+/**
+ * Esta clase basicamente nos da lo necesario para que el usuario pueda interactuar con nuestra base de datos
+ * a partir de un menu que nosotros proveemos, el usuario escoge una opcion con un int, y nuestro programa
+ * hara lo que la opcion del menu nos ha indicado
+ *
+ * @author tarikii
+ */
 public class Main {
   private static final Scanner scanner = new Scanner(System.in);
 
   static SessionFactory sessionFactoryObj;
+
+  /**
+   * Creamos un constructor vacio de Main (porque simplemente nos da un error en JavaDoc si no lo hacemos)
+   *
+   */
+  public Main(){}
 /*
   private static SessionFactory buildSessionFactory() {
     // Creating Configuration Instance & Passing Hibernate Configuration File
@@ -41,6 +54,11 @@ public class Main {
     return sessionFactoryObj;
   } */
 
+  /**
+   * Construye un Object Hibernate para que podamos empezar a interactuar con la base de datos.
+   *
+   * @return Nos devuelve el Hibernate que hemos construido con una clase SessionFactory.
+   */
   private static SessionFactory buildSessionFactory() {
     try {
       StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
@@ -54,6 +72,11 @@ public class Main {
     }
   }
 
+  /**
+   * Crea un EntityManagerFactory para interactuar con el framework.
+   *
+   * @return Devuelve el EntityManagerFactory.
+   */
   public static EntityManagerFactory createEntityManagerFactory(){
     EntityManagerFactory emf;
     try {
@@ -65,6 +88,11 @@ public class Main {
     return emf;
   }
 
+  /**
+   * Aqui basicamente muestra el menu interactuable con el usuario, donde podremos toquetear la base de datos.
+   *
+   * @param args Los argumentos que le pasamos por consola (no se usa)
+   */
   public static void main(String[] args) {
     boolean salirMenu = false;
 
@@ -75,7 +103,7 @@ public class Main {
     EntityManagerFactory entityManagerFactory = createEntityManagerFactory();
     //sessionObj = buildSessionFactory().openSession();
 
-
+    //Creamos los 3 controladores que hemos creado para poder usar las tablas de la base de datos
     WeaponController weaponController = new WeaponController(c, entityManagerFactory);
     CharacterController characterController = new CharacterController(c, entityManagerFactory);
     CharacterTypeController characterTypeController = new CharacterTypeController(c, entityManagerFactory);
@@ -84,13 +112,15 @@ public class Main {
     int opcio;
 
 
+    //Nos saldra el menu infinitas veces, hasta que se presione la tecla 0 que nos cierra el programa.
     while(!salirMenu){
       opcio = menu.mainMenu();
 
+      //Aqui se muestran todas las opciones del menu, cada opcion se encarga de lo que indicamos al usuario
+      //por escrito en el menu
       switch (opcio) {
 
         case 1:
-          System.out.println("1!!");
 
           try{
             characterTypeController.createTableCharacterTypes();
@@ -204,6 +234,77 @@ public class Main {
           break;
 
         case 12:
+          System.out.println("Para crear un nuevo character, rellena este formulario");
+          System.out.println();
+
+          System.out.println("Que tipo de character es, 1 - Plant, 2 - Zombie");
+          int newCharacterTypeId = scanner.nextInt();
+          if(newCharacterTypeId != 1 && newCharacterTypeId != 2){
+            System.out.println("No puede ser otro numero, tiene que ser el 1 o el 2!");
+          }
+          else{
+            System.out.println("Que arma quieres tener en este character, del 1 al 30");
+            int newWeaponId = scanner.nextInt();
+            if(newWeaponId >= 1 && newWeaponId <= 30){
+              System.out.println("Que nombre tiene este character?");
+              String newCharacterName = scanner.nextLine();
+
+              System.out.println("Inserta la imagen del character, por ejemplo: hola.jpg o hola.png");
+              String newCharacterImage = scanner.nextLine();
+
+              System.out.println("Cuanta vida tiene este character?");
+              String newCharacterHealth = scanner.nextLine();
+
+              System.out.println("Que tipo de variante es este character?");
+              String newCharacterVariant = scanner.nextLine();
+
+              System.out.println("Que tipo de habilidad/es tiene este character?");
+              String newCharacterAbility = scanner.nextLine();
+
+              System.out.println("Que tipo de clase es este character?");
+              String newCharacterFPSClass = scanner.nextLine();
+
+              characterController.createCharacterManually(newCharacterTypeId,newWeaponId,newCharacterName,
+                      newCharacterImage,newCharacterHealth,newCharacterVariant,newCharacterAbility,
+                      newCharacterFPSClass);
+            }
+            else{
+              System.out.println("Esta arma no existe, debe de ser un arma del 1 al 30");
+            }
+          }
+
+          break;
+
+        case 13:
+          System.out.println("Para crear un nuevo weapon, rellena este formulario");
+          System.out.println();
+
+          System.out.println("Que nombre quieres que tenga esta arma?");
+          String newWeaponName = scanner.nextLine();
+
+          System.out.println("Que daño quieres que haga esta nueva arma?");
+          int newWeaponDamage = scanner.nextInt();
+
+          weaponController.createWeaponManually(newWeaponName,newWeaponDamage);
+
+          break;
+
+        case 14:
+          System.out.print("Inserta el nombre del character que quieres borrar: ");
+          String deleteNameCharacter = scanner.nextLine();
+
+          characterController.deleteCharacterByName(deleteNameCharacter);
+          break;
+
+
+        case 15:
+          System.out.print("Inserta el nombre del weapon que quieres borrar: ");
+          String deleteNameWeapon = scanner.nextLine();
+
+          weaponController.deleteWeaponByName(deleteNameWeapon);
+          break;
+
+        case 16:
 
           try{
             characterController.dropTableCharacters();
@@ -217,9 +318,9 @@ public class Main {
           break;
 
         default:
-          System.out.println("Adeu!!");
-          System.exit(1);
-
+          System.out.println("Acha luegor!!");
+          salirMenu = true;
+          //System.exit(1);
       }
     }
   }
@@ -277,6 +378,5 @@ public class Main {
             }
         }
     }
-
 
 */
