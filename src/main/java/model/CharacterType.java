@@ -45,6 +45,10 @@ public class CharacterType implements Serializable {
     this.characterTypeId = characterTypeId;
   }
 
+  /**
+   * Un constructor vacio sin atributos ni parametros
+   */
+  public CharacterType(){}
 
 
   /**

@@ -208,6 +208,7 @@ public class Main {
         case 10:
           System.out.println("Que ID tiene el character que quieres cambiar? Del 1 al 30");
           int idCharacter = scanner.nextInt();
+          scanner.nextLine();
           if(idCharacter >= 1 && idCharacter < 31){
             System.out.print("Escribe el nombre nuevo para el character que quieres modificar: ");
             String updateName = scanner.nextLine();
@@ -222,9 +223,11 @@ public class Main {
         case 11:
           System.out.println("Que ID tiene el weapon que quieres cambiar? Del 1 al 30");
           int idWeapon = scanner.nextInt();
+          scanner.nextLine();
           if(idWeapon >= 1 && idWeapon < 31){
             System.out.print("Escribe el daño nuevo para el weapon que quieres modificar: ");
             int updateDamage = scanner.nextInt();
+            scanner.nextLine();
 
             weaponController.updateWeapon(idWeapon,updateDamage);
           }
@@ -239,12 +242,14 @@ public class Main {
 
           System.out.println("Que tipo de character es, 1 - Plant, 2 - Zombie");
           int newCharacterTypeId = scanner.nextInt();
+          scanner.nextLine();
           if(newCharacterTypeId != 1 && newCharacterTypeId != 2){
             System.out.println("No puede ser otro numero, tiene que ser el 1 o el 2!");
           }
           else{
             System.out.println("Que arma quieres tener en este character, del 1 al 30");
             int newWeaponId = scanner.nextInt();
+            scanner.nextLine();
             if(newWeaponId >= 1 && newWeaponId <= 30){
               System.out.println("Que nombre tiene este character?");
               String newCharacterName = scanner.nextLine();
@@ -284,24 +289,26 @@ public class Main {
 
           System.out.println("Que daño quieres que haga esta nueva arma?");
           int newWeaponDamage = scanner.nextInt();
+          scanner.nextLine();
 
           weaponController.createWeaponManually(newWeaponName,newWeaponDamage);
 
           break;
 
+
         case 14:
+          System.out.print("Inserta la ID del weapon que quieres borrar: ");
+          int deleteIdWeapon = scanner.nextInt();
+          scanner.nextLine();
+
+          weaponController.deleteWeaponByName(deleteIdWeapon);
+          break;
+
+        case 15:
           System.out.print("Inserta el nombre del character que quieres borrar: ");
           String deleteNameCharacter = scanner.nextLine();
 
           characterController.deleteCharacterByName(deleteNameCharacter);
-          break;
-
-
-        case 15:
-          System.out.print("Inserta el nombre del weapon que quieres borrar: ");
-          String deleteNameWeapon = scanner.nextLine();
-
-          weaponController.deleteWeaponByName(deleteNameWeapon);
           break;
 
         case 16:

@@ -135,12 +135,12 @@ public class CharacterController {
   public void listAllPlantCharacters() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    List<Character> result = em.createQuery("SELECT c FROM Character c JOIN c.characterType ct WHERE ct.name = :type", Character.class)
-            .setParameter("type", "Plant")
+    List<String> result = em.createQuery("SELECT name FROM Character c WHERE c.characterTypeId = :type", String.class)
+            .setParameter("type", 1)
             .getResultList();
 
-    for (Character character : result) {
-      System.out.println(character.toString());
+    for (String names : result) {
+      System.out.println("Plant Character Name: " + names);
     }
     em.getTransaction().commit();
     em.close();
@@ -152,12 +152,12 @@ public class CharacterController {
   public void listAllZombieCharacters() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    List<Character> result = em.createQuery("SELECT c FROM Character c JOIN c.characterType ct WHERE ct.name = :type", Character.class)
-            .setParameter("type", "Zombie")
+    List<String> result = em.createQuery("SELECT name FROM Character c WHERE c.characterTypeId = :type", String.class)
+            .setParameter("type", 2)
             .getResultList();
 
-    for (Character character : result) {
-      System.out.println(character.toString());
+    for (String names : result) {
+      System.out.println("Zombie Character Name: " + names);
     }
     em.getTransaction().commit();
     em.close();
@@ -235,7 +235,7 @@ public class CharacterController {
                     "      ON UPDATE NO ACTION ON DELETE NO ACTION, " +
                     "  CONSTRAINT fk_characters_weapons FOREIGN KEY (id_weapon) " +
                     "      REFERENCES weapons (id_weapon) MATCH SIMPLE " +
-                    "      ON UPDATE NO ACTION ON DELETE NO ACTION " +
+                    "      ON UPDATE NO ACTION ON DELETE CASCADE " +
                     ")"
     ).executeUpdate();
 

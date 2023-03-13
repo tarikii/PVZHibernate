@@ -2,6 +2,8 @@ package model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Esta clase representara todos los weapons que vayamos metiendo en la tabla weapons de nuestra base de datos
@@ -34,6 +36,9 @@ public class Weapon implements Serializable {
    */
   @Column(name = "damage")
   int damage;
+
+  @OneToMany(mappedBy = "weapon", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Character> characters = new ArrayList<>();
 
   /**
 
@@ -109,6 +114,14 @@ public class Weapon implements Serializable {
    */
   public void setDamage(int damage) {
     this.damage = damage;
+  }
+
+  public List<Character> getCharacters() {
+    return characters;
+  }
+
+  public void setCharacters(List<Character> characters) {
+    this.characters = characters;
   }
 
   /**

@@ -85,9 +85,9 @@ public class Character implements Serializable {
    * La lista de weapons asociada con un character
    *
    */
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "id_weapon", referencedColumnName = "id_weapon")
-  private List<Weapon> weapons = new ArrayList<Weapon>();
+  @ManyToOne
+  @JoinColumn(name = "weapon_id")
+  private Weapon weapon;
 
 
   /**
@@ -291,17 +291,17 @@ public class Character implements Serializable {
    *
    * @return lista de weapons
    */
-  public List<Weapon> getWeapons() {
-    return weapons;
+  public Weapon getWeapon() {
+    return weapon;
   }
 
   /**
    * Editamos la lista de weapons de un character
    *
-   * @param weapons la nueva lista de weapons
+   * @param weapon la nueva lista de weapons
    */
-  public void setWeapons(List<Weapon> weapons) {
-    this.weapons = weapons;
+  public void setWeapon(Weapon weapon) {
+    this.weapon = weapon;
   }
 
   /**
@@ -321,7 +321,7 @@ public class Character implements Serializable {
             ", variant='" + variant + '\'' +
             ", abilities='" + abilities + '\'' +
             ", FPSClass='" + FPSClass + '\'' +
-            ", weapons=" + weapons.toString() +
+            ", weapons=" + weapon.toString() +
             '}';
   }
 }

@@ -203,16 +203,16 @@ public class WeaponController {
   /**
    * Borra el weapon o los weapons que poseen el mismo nombre que pone nuestro usuario por pantalla
    *
-   @param name El nombre del weapon a borrar
+   @param weaponId El nombre del weapon a borrar
    @throws javax.persistence.PersistenceException Devuelve este error si ha habido un problema borrando
    */
-  public void deleteWeaponByName(String name){
-    String sql = "FROM Weapon WHERE name = :name";
+  public void deleteWeaponByName(int weaponId){
+    String sql = "FROM Weapon WHERE weaponId = :weaponId";
 
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     List<Weapon> result = em.createQuery(sql, Weapon.class)
-            .setParameter("name", name)
+            .setParameter("weaponId", weaponId)
             .getResultList();
     for (Weapon weapon : result) {
       em.remove(weapon);

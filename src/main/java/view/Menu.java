@@ -41,13 +41,13 @@ public class Menu {
             System.out.println("6. Listar la tabla characters que sean Plant.");
             System.out.println("7. Listar la tabla characters que sean Zombie.");
             System.out.println("8. Listar el nombre de los characters y ordenar por nombre");
-            System.out.println("9. Listar la tabla weapons por el nombre del weapon.");
+            System.out.println("9. Buscar un weapon y listarlo.");
             System.out.println("10. Modificar un character");
             System.out.println("11. Modificar un weapon");
             System.out.println("12. Crear un character manualmente");
             System.out.println("13. Crear un weapon manualmente");
-            System.out.println("14. Borrar un character por su nombre.");
-            System.out.println("15. Borrar un weapon por su nombre.");
+            System.out.println("14. Borrar un weapon por su ID.");
+            System.out.println("15. Borrar un character por su nombre.");
             System.out.println("16. Borrar TODAS las tablas.");
 
             System.out.println("0. Sortir. ");
