@@ -20,7 +20,7 @@ public class Weapon implements Serializable {
    *
    */
   @Id
-  @Column(name = "id_weapon")
+  @Column(name = "id_weapon", insertable = false, updatable = false)
   int weaponId;
 
   /**
@@ -36,9 +36,6 @@ public class Weapon implements Serializable {
    */
   @Column(name = "damage")
   int damage;
-
-  @OneToMany(mappedBy = "weapon", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Character> characters = new ArrayList<>();
 
   /**
 
@@ -114,14 +111,6 @@ public class Weapon implements Serializable {
    */
   public void setDamage(int damage) {
     this.damage = damage;
-  }
-
-  public List<Character> getCharacters() {
-    return characters;
-  }
-
-  public void setCharacters(List<Character> characters) {
-    this.characters = characters;
   }
 
   /**

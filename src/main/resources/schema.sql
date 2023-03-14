@@ -19,8 +19,8 @@ CREATE TABLE character_type
 CREATE TABLE characters
 (
   id_character serial NOT NULL,
-  id_character_type integer,
-  id_weapon integer NOT NULL,
+  id_character_type integer NOT NULL,
+  id_weapon integer,
   name character varying(3000) NOT NULL,
   image character varying(3000) NOT NULL ,
   health character varying(3000) NOT NULL,

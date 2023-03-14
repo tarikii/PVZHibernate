@@ -1,8 +1,10 @@
+/**
+ * Paquete que contiene el controlador de las clases con las que podremos cambiar
+ */
 package controller;
 
-import model.Character;
-import model.CharacterType;
 
+import model.CharacterType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

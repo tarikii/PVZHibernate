@@ -1,3 +1,6 @@
+/**
+ * Paquete que contiene la conexion a nuestra base de datos
+ */
 package database;
 
 import java.io.IOException;

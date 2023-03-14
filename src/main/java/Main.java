@@ -134,7 +134,7 @@ public class Main {
 
         case 2:
 
-          System.out.println("2!!");
+
           try {
             List<Weapon> weapons = weaponController.readWeaponsFile("src/main/resources/weapons.csv");
             for (Weapon w : weapons) {

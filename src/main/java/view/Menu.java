@@ -1,3 +1,6 @@
+/**
+ * Paquete que contiene el menu interactivo de nuestra BBDD
+ */
 package view;
 
 import java.io.BufferedReader;

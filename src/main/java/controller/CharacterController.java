@@ -285,15 +285,21 @@ public class CharacterController {
    @param name El nombre del character a borrar
    @throws javax.persistence.PersistenceException Devuelve este error si ha habido un problema borrando
    */
-  public void deleteCharacterByName(String name){
+  public void deleteCharacterByName(String name) {
     String sql = "FROM Character WHERE name = :name";
-
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
     List<Character> result = em.createQuery(sql, Character.class)
             .setParameter("name", name)
             .getResultList();
     for (Character character : result) {
+      List<Weapon> weapons = character.getWeapons();
+      if (!weapons.isEmpty()) {
+        Weapon weapon = weapons.get(0);
+        character.setWeapons(Collections.emptyList());
+        em.merge(character);
+        em.remove(weapon);
+      }
       em.remove(character);
     }
     em.getTransaction().commit();

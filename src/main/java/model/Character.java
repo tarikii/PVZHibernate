@@ -1,3 +1,6 @@
+/**
+ * Paquete que contiene todas las clases con las que vamos a trabajar
+ */
 package model;
 
 import javax.persistence.*;
@@ -36,7 +39,7 @@ public class Character implements Serializable {
    * El identificador del weapon
    *
    */
-  @Column(name = "id_weapon")
+  @Column(name = "id_weapon", insertable = false, updatable = false)
   int weaponId;
 
   /**
@@ -85,9 +88,9 @@ public class Character implements Serializable {
    * La lista de weapons asociada con un character
    *
    */
-  @ManyToOne
-  @JoinColumn(name = "weapon_id")
-  private Weapon weapon;
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id_weapons", referencedColumnName = "id_weapon", nullable = false)
+  private List<Weapon> weapons = new ArrayList<Weapon>();
 
 
   /**
@@ -114,6 +117,7 @@ public class Character implements Serializable {
     this.variant = variant;
     this.abilities = abilities;
     this.FPSClass = FPSClass;
+    this.weapons = getWeapons();
   }
 
   /**
@@ -278,30 +282,33 @@ public class Character implements Serializable {
   }
 
   /**
+   * Nos devuelve la lista de weapons de un character
+   *
+   * @return Nos devuelve la lista de wepaons
+   */
+  public List<Weapon> getWeapons() {
+    return weapons;
+  }
+
+  /**
+   * Editamos la lista de weapons
+   *
+   * @param weapons la nueva lista que contiene el character
+   */
+  public void setWeapons(List<Weapon> weapons) {
+    this.weapons = weapons;
+  }
+
+  /**
    * Edita la clase del character en el juego
    *
    @param FPSClass Su nueva clase en el juego
    */
+
+
+
   public void setFPSClass(String FPSClass) {
     this.FPSClass = FPSClass;
-  }
-
-  /**
-   * Nos devuelve toda una lista de los weapons que es capaz de usar el character
-   *
-   * @return lista de weapons
-   */
-  public Weapon getWeapon() {
-    return weapon;
-  }
-
-  /**
-   * Editamos la lista de weapons de un character
-   *
-   * @param weapon la nueva lista de weapons
-   */
-  public void setWeapon(Weapon weapon) {
-    this.weapon = weapon;
   }
 
   /**
@@ -321,7 +328,7 @@ public class Character implements Serializable {
             ", variant='" + variant + '\'' +
             ", abilities='" + abilities + '\'' +
             ", FPSClass='" + FPSClass + '\'' +
-            ", weapons=" + weapon.toString() +
+            ", weapons=" + weapons.toString() +
             '}';
   }
 }
