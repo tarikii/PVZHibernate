@@ -141,6 +141,7 @@ public class Main {
               try {
                 weaponController.addWeapon(w);
               } catch (Exception e) {
+                e.printStackTrace();
               }
             }
 
@@ -150,6 +151,7 @@ public class Main {
               try {
                 characterTypeController.addCharacterType(ct);
               } catch (Exception e) {
+                e.printStackTrace();
               }
             }
 
@@ -158,6 +160,7 @@ public class Main {
               try {
                 characterController.addCharacter(ch);
               } catch (Exception e) {
+                e.printStackTrace();
               }
             }
 

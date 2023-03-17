@@ -302,7 +302,18 @@ public class CharacterController {
       }
       em.remove(character);
     }
-    em.getTransaction().commit();
+    try{
+      em.getTransaction().commit();
+    }catch (Exception e){
+      System.out.println();
+      System.out.println();
+      System.out.println("------------------------------------------------------------------------------------------------");
+      System.out.println("-------------------------------------WARNING----------------------------------------------------");
+      System.out.println("PRIMERO DEBES BORRAR UN WEAPON, YA QUE DEPENDEN DE ESTE CAMPEON QUE ESTAS INTENTANDO BORRAR!!!!!");
+      System.out.println("------------------------------------------------------------------------------------------------");
+      System.out.println("------------------------------------------------------------------------------------------------");
+
+    }
     em.close();
   }
 

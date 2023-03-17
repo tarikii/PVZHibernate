@@ -20,7 +20,7 @@ public class Weapon implements Serializable {
    *
    */
   @Id
-  @Column(name = "id_weapon", insertable = false, updatable = false)
+  @Column(name = "id_weapon")
   int weaponId;
 
   /**

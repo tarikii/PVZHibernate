@@ -39,7 +39,7 @@ public class Character implements Serializable {
    * El identificador del weapon
    *
    */
-  @Column(name = "id_weapon", insertable = false, updatable = false)
+  @Column(name = "id_weapon")
   int weaponId;
 
   /**
@@ -89,7 +89,7 @@ public class Character implements Serializable {
    *
    */
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "id_weapons", referencedColumnName = "id_weapon", nullable = false)
+  @JoinColumn(name = "id_weapon", referencedColumnName = "id_weapon")
   private List<Weapon> weapons = new ArrayList<Weapon>();
 
 
@@ -117,7 +117,6 @@ public class Character implements Serializable {
     this.variant = variant;
     this.abilities = abilities;
     this.FPSClass = FPSClass;
-    this.weapons = getWeapons();
   }
 
   /**
@@ -328,7 +327,6 @@ public class Character implements Serializable {
             ", variant='" + variant + '\'' +
             ", abilities='" + abilities + '\'' +
             ", FPSClass='" + FPSClass + '\'' +
-            ", weapons=" + weapons.toString() +
             '}';
   }
 }
